@@ -1,0 +1,40 @@
+Sub ExportWriterAlsPDF_KI_und_Schliessen()
+
+    Dim oDoc As Object
+    Dim sFolder As String
+    Dim sPDFURL As String
+    Dim sTimestamp As String
+    Dim aProps(0) As New com.sun.star.beans.PropertyValue
+
+    oDoc = ThisComponent
+
+    If oDoc.hasLocation() = False Then
+        MsgBox "Dokument bitte zuerst speichern.", 48, "PDF-Export"
+        Exit Sub
+    End If
+
+    ' Zielordner (muss existieren!)
+    sFolder = "file:///Users/thomaskienzle/Desktop/pdf-ki/"
+
+    ' Zeitstempel rein numerisch
+    sTimestamp = _
+        Year(Now) & "-" & _
+        Right("0" & Month(Now), 2) & "-" & _
+        Right("0" & Day(Now), 2) & "_" & _
+        Right("0" & Hour(Now), 2) & "-" & _
+        Right("0" & Minute(Now), 2) & "-" & _
+        Right("0" & Second(Now), 2)
+
+    sPDFURL = sFolder & "KI_" & sTimestamp & ".pdf"
+
+    aProps(0).Name = "FilterName"
+    aProps(0).Value = "writer_pdf_Export"
+
+    oDoc.storeToURL(sPDFURL, aProps())
+
+   ' MsgBox "PDF gespeichert unter:" & Chr(10) & ConvertFromURL(sPDFURL), 64, "Fertig!"
+
+    ' Dokument schließen
+    oDoc.close(True)
+
+End Sub
